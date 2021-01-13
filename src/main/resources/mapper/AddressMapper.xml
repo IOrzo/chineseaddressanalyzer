@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sixtofly.chineseaddressanalyzer.mapper.AddressMapper">
+
+    <select id="findByNameLike" parameterType="com.sixtofly.chineseaddressanalyzer.entity.dto.AddressAnalyzeParams" resultType="com.sixtofly.chineseaddressanalyzer.entity.Address">
+        select * from address
+        where (name like concat(#{name,jdbcType=VARCHAR}, '%') or alias = #{name,jdbcType=VARCHAR})
+        and level = #{level,jdbcType=CHAR}
+        and deleted = 0
+    </select>
+
+    <insert id="batchInsert" parameterType="com.sixtofly.chineseaddressanalyzer.entity.Address" >
+        insert into address (id, name, code, parent_id, province_name, province_code, city_name, city_code, level, gmt_create, gmt_modified) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.name}, #{item.code}, #{item.parentId}, #{item.provinceName}, #{item.provinceCode}, #{item.cityName}, #{item.cityCode}, #{item.level}, #{item.gmtCreate}, #{item.gmtModified})
+        </foreach>
+    </insert>
+
+</mapper>
+  
